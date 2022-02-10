@@ -15,17 +15,18 @@
       </div>
       <!-- /.card-header -->
       <!-- form start -->
-      <form method="post" action="{{route('cities.store')}}">
+      {{-- <form method="post" action="{{route('cities.store')}}"> --}}
+      <form id="create-form">
         @csrf
         <div class="card-body">
           <div class="form-group">
             <label for="name">City Name</label>
-            <input type="text" class="form-control" id="name" placeholder="Enter Name" name="name">
+            <input type="text" class="form-control" id="name" placeholder="Enter Name" >
           </div>
           </div>
 
           <div class="card-footer">
-            <button type="submit" class="btn btn-primary">Add</button>
+            <button type="button" onclick="store()" class="btn btn-primary">Add</button>
           </div>
         </div>
         <!-- /.card-body -->
@@ -41,5 +42,31 @@
 
 
 @section('scripts')
+<script>
+    function store(){
+        let formData = new FormData();
+        formData.append('name',document.getElementById('name').value);
+
+        axios.post('/cms/admin/cities',formData)
+            .then(function (response) {
+                // handle success
+                console.log(response);
+                toastr.success(response.data.message);
+
+                // document.getElementById('create-form').reset();
+                window.location.href="/cms/admin/cities";
+
+            })
+            .catch(function (error) {
+                // handle error
+                console.log(error);
+                toastr.error(error.response.data.message);
+            })
+
+
+    }
+
+
+</script>
 
 @endsection

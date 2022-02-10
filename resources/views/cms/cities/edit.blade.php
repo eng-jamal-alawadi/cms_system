@@ -15,23 +15,21 @@
       </div>
       <!-- /.card-header -->
       <!-- form start -->
-      <form method="post" action="{{route('cities.update',$city->id)}}">
+      {{-- <form method="post" action="{{route('cities.update',$city->id)}}"> --}}
+      <form >
         @csrf
         @method('PUT')
         <div class="card-body">
           <div class="form-group">
-            <label for="exampleInputEmail1">City Name</label>
-            <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Enter Name"
-                value="@if(old('name'))
-                {{old('name')}}
-                @else
-                {{$city->name}}
-                @endif" name="name">
+            <label for="name">City Name</label>
+            <input type="text" class="form-control" id="name" placeholder="Enter Name"
+                value="@if(old('name')){{old('name')}}@else{{$city->name}}@endif"
+                name="name">
           </div>
           </div>
 
           <div class="card-footer">
-            <button type="submit" class="btn btn-primary">Update</button>
+            <button type="button" onclick="update({{$city->id}})" class="btn btn-primary">Update</button>
           </div>
         </div>
         <!-- /.card-body -->
@@ -47,5 +45,29 @@
 
 
 @section('scripts')
+<script>
+    function update(id){
+        let formData = new FormData();
+        formData.append('name',document.getElementById('name').value);
+
+        axios.put('/cms/admin/cities/'+id,{
+    name: document.getElementById('name').value,
+})
+    .then(function (response) {
+        // handle success
+        console.log(response);
+        toastr.success(response.data.message);
+        // document.getElementById('create-form').reset();
+        window.location.href="/cms/admin/cities";
+    })
+    .catch(function (error) {
+        // handle error
+        console.log(error);
+        toastr.error(error.response.data.message);
+    })
+
+    }
+
+</script>
 
 @endsection

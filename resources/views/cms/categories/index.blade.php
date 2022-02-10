@@ -1,43 +1,64 @@
 @extends('cms.layouts.master')
-@section('title','Cities')
-@section('big_title','Cities Page')
-@section('main_page','Cities')
+@section('title','Categories')
+@section('big_title','Categories Page')
+@section('main_page','Categories')
 @section('sub_page','index')
 
 
 @section('content')
 <div class="col-12">
     <div class="card">
+        @if (session('success'))
+
+        <div class="alert alert-success alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+            <h5><i class="icon fas fa-check"></i> Alert!</h5>
+            {{session('success')}}
+          </div>
+
+
+        @endif
 
       <div class="card-header">
-        <h3 class="card-title">All Cities</h3>
+        <h3 class="card-title">All Categories</h3>
+
 
       </div>
       <!-- /.card-header -->
       <div class="card-body table-responsive p-0">
+
         <table class="table table-hover table-bordered text-nowrap">
           <thead>
             <tr>
-              <th>ID</th>
+                <th>ID</th>
+              <th>Image</th>
               <th>Name</th>
+              <th>Active</th>
               <th>Created at</th>
               <th>Updated at</th>
               <th>Settings</th>
             </tr>
           </thead>
           <tbody>
-              @forelse ($cities as $city)
+              @forelse ($categories as $category)
             <tr>
-              <td>{{$city->id}}</td>
-              <td>{{$city->name}}</td>
-              <td>{{$city->created_at}}</td>
-              <td> {{$city->updated_at}} </td>
+                <td>{{$category->id}}</td>
+              <td><img class="img-circle img-bordered-sm" width="80"
+                src="{{asset('upload/'.$category->image)}}" alt="User Image">
+                </td>
+
+              <td>{{$category->name}}</td>
+              {{-- <td>@if($category->active) Active @else Disable @endif </td> --}}
+              <td>  <span class="badge @if($category->active)bg-success @else bg-danger @endif">{{$category->status}}</span> </td>
+
+              <td>{{$category->created_at}}</td>
+              <td> {{$category->updated_at}} </td>
               <td>
                 <div class="btn-group">
-                  <a href="{{route('cities.edit',$city->id)}}" class="btn btn-info">
+                  <a href="{{route('categories.edit',$category->id)}}" class="btn btn-info">
                     <i class="far fa-edit"></i>
                   </a>
-                  {{-- <form method="POST" action="{{route('cities.destroy',$city->id)}}">
+                  {{-- <form method="POST" action="{{route('categories.destroy',$category->id)}}">
                     @csrf
                     @method('delete')
                     <button type="submit" class="btn btn-danger">
@@ -45,9 +66,8 @@
                       </button>
                   </form> --}}
 
-                  <a href="#" class="btn btn-danger" onclick="confirmDestroy({{$city->id}} , this)">
+                  <a href="#" class="btn btn-danger" onclick="confirmDestroy({{$category->id}} , this)">
                     <i class="far fa-trash-alt"></i>
-
                   </a>
 
 
@@ -56,7 +76,7 @@
             </tr>
               @empty
                 <tr>No data Found</tr>
-              @endif
+              @endforelse
 
 
           </tbody>
@@ -93,7 +113,7 @@
       }
 
       function destroy(id,referance){
-        axios.delete('/cms/admin/cities/'+id)
+        axios.delete('/cms/admin/categories/'+id)
             .then(function (response) {
                 // handle success
                 console.log(response);
@@ -120,3 +140,5 @@
 
   </script>
 @endsection
+
+

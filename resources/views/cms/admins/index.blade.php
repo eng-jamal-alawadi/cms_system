@@ -1,7 +1,7 @@
 @extends('cms.layouts.master')
-@section('title','Cities')
-@section('big_title','Cities Page')
-@section('main_page','Cities')
+@section('title','Admins')
+@section('big_title','Admins Page')
+@section('main_page','Admins')
 @section('sub_page','index')
 
 
@@ -10,53 +10,55 @@
     <div class="card">
 
       <div class="card-header">
-        <h3 class="card-title">All Cities</h3>
+        <h3 class="card-title">All Admins</h3>
+
 
       </div>
       <!-- /.card-header -->
       <div class="card-body table-responsive p-0">
+
         <table class="table table-hover table-bordered text-nowrap">
           <thead>
             <tr>
               <th>ID</th>
               <th>Name</th>
+              <th>Email</th>
+              <th>Status</th>
               <th>Created at</th>
               <th>Updated at</th>
               <th>Settings</th>
             </tr>
           </thead>
           <tbody>
-              @forelse ($cities as $city)
+              @forelse ($admins as $admin)
             <tr>
-              <td>{{$city->id}}</td>
-              <td>{{$city->name}}</td>
-              <td>{{$city->created_at}}</td>
-              <td> {{$city->updated_at}} </td>
+                <td>{{$admin->id}}</td>
+
+              <td>{{$admin->name}}</td>
+              <td>{{$admin->email}}</td>
+              {{-- <td>@if($admin->active) Active @else Disable @endif </td> --}}
+              <td>  <span class="badge @if($admin->active)bg-success @else bg-danger @endif">{{$admin->status}}</span> </td>
+
+              <td>{{$admin->created_at}}</td>
+              <td> {{$admin->updated_at}} </td>
               <td>
                 <div class="btn-group">
-                  <a href="{{route('cities.edit',$city->id)}}" class="btn btn-info">
+                  <a href="{{route('admins.edit',$admin->id)}}" class="btn btn-info">
                     <i class="far fa-edit"></i>
                   </a>
-                  {{-- <form method="POST" action="{{route('cities.destroy',$city->id)}}">
-                    @csrf
-                    @method('delete')
-                    <button type="submit" class="btn btn-danger">
-                        <i class="far fa-trash-alt"></i>
-                      </button>
-                  </form> --}}
 
-                  <a href="#" class="btn btn-danger" onclick="confirmDestroy({{$city->id}} , this)">
+                  <a href="#" class="btn btn-danger" onclick="confirmDestroy({{$admin->id}} , this)">
                     <i class="far fa-trash-alt"></i>
-
                   </a>
 
 
                 </div>
                 </td>
-            </tr>
-              @empty
+                @empty
                 <tr>No data Found</tr>
-              @endif
+              @endforelse
+            </tr>
+
 
 
           </tbody>
@@ -93,7 +95,7 @@
       }
 
       function destroy(id,referance){
-        axios.delete('/cms/admin/cities/'+id)
+        axios.delete('/cms/admin/admins/'+id)
             .then(function (response) {
                 // handle success
                 console.log(response);
@@ -120,3 +122,5 @@
 
   </script>
 @endsection
+
+

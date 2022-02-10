@@ -15,6 +15,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <link rel="stylesheet" href="{{asset('cms/plugins/fontawesome-free/css/all.min.css')}}">
   <!-- Theme style -->
   <link rel="stylesheet" href="{{asset('cms/dist/css/adminlte.min.css')}}">
+    <!-- Toastr -->
+    <link rel="stylesheet" href="{{asset('cms/plugins/toastr/toastr.min.css')}}">
+
 </head>
 <body class="hold-transition sidebar-mini">
 <div class="wrapper">
@@ -160,7 +163,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <!-- Main Sidebar Container -->
   <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
-    <a href="index3.html" class="brand-link">
+    <a href="#" class="brand-link">
       <img src="{{asset('cms/dist/img/AdminLTELogo.png')}}" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
       <span class="brand-text font-weight-light">AdminLTE 3</span>
     </a>
@@ -227,6 +230,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <script src="{{asset('cms/dist/js/adminlte.min.js')}}"></script>
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<!-- Toastr -->
+<script src="{{asset('cms/plugins/toastr/toastr.min.js')}}"></script>
 
 
 @yield('scripts')

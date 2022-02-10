@@ -16,7 +16,7 @@ class CityController extends Controller
     public function index()
     {
         $cities = City::all();
-        return view('cms.cities.index',compact('cities'));
+        return view('cms.cities.index',compact('cities',$cities));
     }
 
     /**
@@ -37,15 +37,38 @@ class CityController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'name' => 'required|max:40'
-        ]);
-        City::create([
-            'name' => $request->name
-        ]);
-        $cities = City::get();
+        // $request->validate([
+        //     'name' => 'required|max:40'
+        // ]);
+        // City::create([
+        //     'name' => $request->name
+        // ]);
+        // $cities = City::get();
 
-        return redirect()->route('cities.index',compact('cities'))->with('success','Ctiy created successfuly');
+        // return redirect()->route('cities.index',compact('cities'))->with('success','Ctiy created successfuly');
+
+
+        $validator=Validator($request->all(),[
+            'name'=>'required|max:30|min:3'
+        ]);
+
+        if(!$validator->fails()){
+            $city= new City();
+            $city->name = $request->get('name');
+            $isSaved=$city->save();
+            return response()->json([
+                'message'=>$isSaved ? "City Created successfuly " : "Failed to Saved "
+            ],$isSaved ? Response::HTTP_CREATED : Response::HTTP_BAD_REQUEST );
+        }else{
+            return response()->json([
+                'message'=>$validator->getMessageBag()->first()
+            ],Response::HTTP_BAD_REQUEST);
+
+        }
+
+
+
+
 
     }
 
@@ -79,16 +102,38 @@ class CityController extends Controller
      * @param  \App\Models\City  $city
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, City $city)
     {
-        $request ->validate([
-            'name'=>'required|min:3|max:40'
-        ]);
-        City::findOrFail($id)->update([
-            'name' => $request->name
+        // $request ->validate([
+        //     'name'=>'required|min:3|max:40'
+        // ]);
+        // City::findOrFail($id)->update([
+        //     'name' => $request->name
+        // ]);
+
+        // return redirect()->route('cities.index')->with('success','Ctiy Updated successfuly');
+
+        $validator=Validator($request->all(),[
+            'name'=>'required|max:30|min:3'
         ]);
 
-        return redirect()->route('cities.index')->with('success','Ctiy Updated successfuly');
+        if(!$validator->fails()){
+            $city->name=$request->get('name');
+            $isUpdated = $city->save();
+
+            return response()->json([
+                'message'=>$isUpdated ? "City UPdated Successfuly" : "Failed to Upfdated",
+
+            ],$isUpdated ? Response::HTTP_CREATED : Response::HTTP_BAD_REQUEST);
+
+        }else{
+            return response()->json([
+                'message'=>$validator->getMessageBag()->first()
+            ],Response::HTTP_BAD_REQUEST);
+        }
+
+
+
 
     }
 
