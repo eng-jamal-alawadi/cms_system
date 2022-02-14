@@ -7,14 +7,13 @@ use App\Http\Controllers\CityController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CategoryController;
-
-
+use App\Mail\welcomeEmail;
 
 Route::get('/', function () {
     return view('welcome');
 });
 
-Route::prefix('cms/')->middleware('guest:admins')->group(function () {
+Route::prefix('cms/')->middleware('guest:admin,user')->group(function () {
 
     Route::get('age-check',function(){
         echo"We are here";
@@ -27,7 +26,7 @@ Route::prefix('cms/')->middleware('guest:admins')->group(function () {
 
 });
 
-Route::prefix('cms/admin')->middleware('auth:admins')->group(function(){
+Route::prefix('cms/admin')->middleware('auth:admin,user')->group(function(){
 // Route::prefix('cms/admin')->group(function(){
 
         Route::get('/', function () {
@@ -39,7 +38,15 @@ Route::prefix('cms/admin')->middleware('auth:admins')->group(function(){
         Route::resource('users',UserController::class);
         Route::get('logout',[AuthController::class,'logout'])->name('logout');
 
+        Route::get('change-password',[AuthController::class,'changePassword'])->name('change-password');
+        Route::put('update-password',[AuthController::class,'updatePassword']);
+
 
 
 
 });
+
+// Route::get('test-email',function(){
+//     return new welcomeEmail();
+// });
+

@@ -13,7 +13,8 @@ class UserController extends Controller
      */
     public function index()
     {
-        //
+        return 'we are here';
+        // return view('cms.users.index');
     }
 
     /**

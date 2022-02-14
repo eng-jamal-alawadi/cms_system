@@ -17,10 +17,10 @@ return [
     */
 
     'defaults' => [
-        'guard' => 'web',
+        'guard' => 'user',
         'passwords' => 'users',
     ],
-    'admins'=>[
+    'admin'=>[
         'driver'=>'eloquent',
         'model'=>\App\Models\Admin::class,
     ],
@@ -48,7 +48,7 @@ return [
             'provider' => 'users',
         ],
 
-        'admins'=>[
+        'admin'=>[
             'driver'=>'session',
             'provider'=>'admins'
         ],

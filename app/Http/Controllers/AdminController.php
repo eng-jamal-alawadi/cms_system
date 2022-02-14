@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Admin;
 use Dotenv\Validator;
+use App\Mail\welcomeEmail;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use Symfony\Component\HttpFoundation\Response;
 
 class AdminController extends Controller
@@ -46,11 +48,13 @@ class AdminController extends Controller
         ]);
 
         if(!$validator->fails()){
-            $admin=new admin();
+            $admin=new Admin();
             $admin->name=$request->get('name');
             $admin->active=$request->get('active');
             $admin->email=$request->get('email');
             $isSaved=$admin->save();
+
+            Mail::to($admin->email)->send(new welcomeEmail($admin));
             return response()->json([
                 'message'=>$isSaved ?" admin Saved Successfuly" : "Failed to Saved"],
                 $isSaved ? Response::HTTP_CREATED : Response::HTTP_BAD_REQUEST );

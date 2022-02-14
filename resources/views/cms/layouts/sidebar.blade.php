@@ -149,10 +149,18 @@
 
         <li class="nav-header">Settings</li>
         <li class="nav-item">
+            <a href="{{route('change-password')}}" class="nav-link">
+                <i class="fas fa-lock"></i>
+              <p>
+                 Change Password
+              </p>
+            </a>
+          </li>
+        <li class="nav-item">
             <a href="{{route('logout')}}" class="nav-link">
                 <i class="fas fa-sign-out-alt"></i>
               <p>
-                Logout
+                 Logout
               </p>
             </a>
           </li>
