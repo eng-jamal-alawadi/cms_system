@@ -36,10 +36,14 @@ Route::prefix('cms/admin')->middleware('auth:admin,user')->group(function(){
         Route::resource('categories',CategoryController::class);
         Route::resource('admins',AdminController::class);
         Route::resource('users',UserController::class);
-        Route::get('logout',[AuthController::class,'logout'])->name('logout');
 
         Route::get('change-password',[AuthController::class,'changePassword'])->name('change-password');
         Route::put('update-password',[AuthController::class,'updatePassword']);
+
+        Route::get('edit-profile',[AuthController::class,'editProfile'])->name('edit-profile');
+        Route::put('update-profile',[AuthController::class,'updateProfile']);
+
+        Route::get('logout',[AuthController::class,'logout'])->name('logout');
 
 
 

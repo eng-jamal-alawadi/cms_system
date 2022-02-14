@@ -149,6 +149,14 @@
 
         <li class="nav-header">Settings</li>
         <li class="nav-item">
+            <a href="{{route('edit-profile')}}" class="nav-link">
+                <i class="fas fa-edit"></i>
+              <p>
+                 Edit Profile
+              </p>
+            </a>
+          </li>
+        <li class="nav-item">
             <a href="{{route('change-password')}}" class="nav-link">
                 <i class="fas fa-lock"></i>
               <p>

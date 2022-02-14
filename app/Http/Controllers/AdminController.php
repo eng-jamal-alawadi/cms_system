@@ -18,7 +18,8 @@ class AdminController extends Controller
      */
     public function index()
     {
-        $admins = Admin::all();
+        //SELECT * FROM admins WHERE id != 1
+        $admins = Admin::where('id','!=',auth('admin')->id())->get();
         return view('cms.admins.index',compact('admins',$admins));
     }
 

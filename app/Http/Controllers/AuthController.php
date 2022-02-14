@@ -138,5 +138,12 @@ class AuthController extends Controller
 
     }
 
+    public function editProfile(){
+        $guard = auth('admin')->check() ? 'admin' : 'user';
+        $view = auth($guard)->check() ? 'cms.admins.edit' : 'cms.users.edit';
+        return view($view,[$guard=> auth($guard)->user(),'redirect' =>false]);
+
+    }
+
 
 }

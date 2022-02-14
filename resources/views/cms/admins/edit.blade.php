@@ -30,14 +30,16 @@
 
           <div class="form-group">
             <div class="custom-control custom-switch">
-              <input type="checkbox" class="custom-control-input"  @if($admin->active) checked @endif id="active">
+              <input type="checkbox" class="custom-control-input"
+              @if($admin->id == auth('admin')->id())disabled @endif
+              @if($admin->active) checked @endif id="active">
               <label class="custom-control-label"  for="active">Active</label>
             </div>
           </div>
           </div>
 
           <div class="card-footer">
-            <button type="button" onclick="update({{$admin->id}})" class="btn btn-primary">Add</button>
+            <button type="button" onclick="update({{$admin->id}},{{$redirect ?? true}})" class="btn btn-primary">Add</button>
           </div>
         </div>
         <!-- /.card-body -->
@@ -55,7 +57,7 @@
 
 <script>
 
-    function update(id){
+    function update(id,redirect){
 
 axios.put('/cms/admin/admins/'+id,{
     name: document.getElementById('name').value,
@@ -68,7 +70,10 @@ axios.put('/cms/admin/admins/'+id,{
         console.log(response);
         toastr.success(response.data.message);
         // document.getElementById('create-form').reset();
-        window.location.href="/cms/admin/admins";
+        if(redirect){
+            window.location.href="/cms/admin/admins";
+        }
+
     })
     .catch(function (error) {
         // handle error
