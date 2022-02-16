@@ -1,13 +1,15 @@
 <?php
 
 use App\Models\City;
+use App\Mail\welcomeEmail;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CityController;
+use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CategoryController;
-use App\Mail\welcomeEmail;
+use App\Http\Controllers\PermissionController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -15,42 +17,43 @@ Route::get('/', function () {
 
 Route::prefix('cms/')->middleware('guest:admin,user')->group(function () {
 
-    Route::get('age-check',function(){
-        echo"We are here";
-    })->middleware('age:15');
-
-
-    Route::get('{guard}/login',[AuthController::class,'showLoginPage'])->name('login');
-    Route::post('/login',[AuthController::class,'login']);
-
-
+    Route::get('{guard}/login', [AuthController::class, 'showLoginPage'])->name('login');
+    Route::post('/login', [AuthController::class, 'login']);
 });
 
-Route::prefix('cms/admin')->middleware('auth:admin,user')->group(function(){
-// Route::prefix('cms/admin')->group(function(){
 
-        Route::get('/', function () {
-            return view('cms.layouts.master');
-        });
-        Route::resource('cities', CityController::class);
-        Route::resource('categories',CategoryController::class);
-        Route::resource('admins',AdminController::class);
-        Route::resource('users',UserController::class);
+Route::prefix('cms/admin')->middleware('auth:admin,user')->group(function () {
+    // Route::prefix('cms/admin')->group(function(){
 
-        Route::get('change-password',[AuthController::class,'changePassword'])->name('change-password');
-        Route::put('update-password',[AuthController::class,'updatePassword']);
+    Route::view('/', 'cms.layouts.master');
+    Route::resource('categories', CategoryController::class);
 
-        Route::get('edit-profile',[AuthController::class,'editProfile'])->name('edit-profile');
-        Route::put('update-profile',[AuthController::class,'updateProfile']);
+    Route::get('change-password', [AuthController::class, 'changePassword'])->name('change-password');
+    Route::put('update-password', [AuthController::class, 'updatePassword']);
 
-        Route::get('logout',[AuthController::class,'logout'])->name('logout');
+    Route::get('edit-profile', [AuthController::class, 'editProfile'])->name('edit-profile');
+    Route::put('update-profile', [AuthController::class, 'updateProfile']);
 
-
-
-
+    Route::get('logout', [AuthController::class, 'logout'])->name('logout');
 });
+
+
+Route::prefix('cms/admin')->middleware('auth:admin')->group(function () {
+
+    Route::resource('cities', CityController::class);
+    Route::resource('admins', AdminController::class);
+    Route::resource('users', UserController::class);
+    Route::resource('roles', RoleController::class);
+    Route::resource('permissions', PermissionController::class);
+});
+
+
+
+
+
+
+
 
 // Route::get('test-email',function(){
 //     return new welcomeEmail();
 // });
-

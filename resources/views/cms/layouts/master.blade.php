@@ -18,6 +18,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <!-- Toastr -->
     <link rel="stylesheet" href="{{asset('cms/plugins/toastr/toastr.min.css')}}">
 
+      <!-- Select2 -->
+  <link rel="stylesheet" href="{{asset('cms/plugins/select2/css/select2.min.css')}}">
+  <link rel="stylesheet" href="{{asset('cms/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css')}}">
+
 </head>
 <body class="hold-transition sidebar-mini">
 <div class="wrapper">
@@ -232,6 +236,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <!-- Toastr -->
 <script src="{{asset('cms/plugins/toastr/toastr.min.js')}}"></script>
+<!-- Select2 -->
+<script src="{{asset('cms/plugins/select2/js/select2.full.min.js')}}"></script>
 
 
 @yield('scripts')

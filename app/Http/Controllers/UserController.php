@@ -2,7 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
+use Dotenv\Validator;
+use App\Mail\welcomeEmail;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
+use Symfony\Component\HttpFoundation\Response;
 
 class UserController extends Controller
 {
@@ -13,8 +18,9 @@ class UserController extends Controller
      */
     public function index()
     {
-        return 'we are here';
-        // return view('cms.users.index');
+        // return 'we are here';
+        $users = User::all();
+        return view('cms.users.index', compact('users'));
     }
 
     /**
@@ -24,7 +30,7 @@ class UserController extends Controller
      */
     public function create()
     {
-        //
+        return view('cms.users.create');
     }
 
     /**
@@ -35,7 +41,33 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
+        $validator = Validator($request->all(), [
+            'name' => 'required|min:3|max:30',
+            'active' => 'required|boolean',
+            'email' => 'required'
+        ]);
+
+        if (!$validator->fails()) {
+            $user = new User();
+            $user->name = $request->get('name');
+            $user->active = $request->get('active');
+            $user->email = $request->get('email');
+            $isSaved = $user->save();
+
+            Mail::to($user->email)->send(new welcomeEmail($user));
+
+            return response()->json(
+                [
+                    'message' => $isSaved ? " user Saved Successfuly" : "Failed to Saved"
+                ],
+                $isSaved ? Response::HTTP_CREATED : Response::HTTP_BAD_REQUEST
+            );
+        } else {
+            return response()->json([
+                'message' => $validator->getMessageBag()->first()
+            ], Response::HTTP_BAD_REQUEST);
+        }
     }
 
     /**
@@ -55,9 +87,9 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(User $user)
     {
-        //
+        return view('cms.users.edit', compact('user', $user));
     }
 
     /**
@@ -67,9 +99,33 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, User $user)
     {
-        //
+
+        $validator = Validator($request->all(), [
+            'name' => 'required|min:3|max:30',
+            'active' => 'required|boolean',
+            'email' => 'required'
+        ]);
+
+        if (!$validator->fails()) {
+
+            $user->name = $request->get('name');
+            $user->active = $request->get('active');
+            $user->email = $request->get('email');
+            $isUpdated = $user->save();
+
+            return response()->json(
+                [
+                    'message' => $isUpdated ? " user Updated Successfuly" : "Failed to Update"
+                ],
+                $isUpdated ? Response::HTTP_CREATED : Response::HTTP_BAD_REQUEST
+            );
+        } else {
+            return response()->json([
+                'message' => $validator->getMessageBag()->first()
+            ], Response::HTTP_BAD_REQUEST);
+        }
     }
 
     /**
@@ -78,8 +134,19 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(User $user)
     {
-        //
+        $isDeleted = $user->delete();
+        if($isDeleted){
+            return response()->json([
+                'title'=>'Success' , 'text'=>'User Deleted Successfuly' , 'icon'=>'success'
+            ],Response::HTTP_OK);
+        }else{
+
+            return response()->json([
+                'title'=>'Failde' , 'text'=>'User Delete Failde' , 'icon'=>'error'
+            ],Response::HTTP_BAD_REQUEST);
+
+        }
     }
 }

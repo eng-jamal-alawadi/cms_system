@@ -8,7 +8,7 @@
         </div>
         <div class="info">
           {{-- <a href="#" class="d-block">{{auth()->user()->name}}</a> --}}
-          <a href="#" class="d-block">alexander alix </a>
+          <a href="#" class="d-block">{{auth()->user()->name}} </a>
         </div>
       </div>
 
@@ -43,6 +43,7 @@
           </ul>
         </li>
 
+
         <li class="nav-header">Human Resources</li>
         <li class="nav-item">
             <a href="#" class="nav-link">
@@ -68,9 +69,10 @@
 
             </ul>
           </li>
-          {{-- <li class="nav-item">
+
+          <li class="nav-item">
             <a href="#" class="nav-link">
-                <i class="fas fa-users"></i>
+                <i class="fas fa-user-tie"></i>
               <p>
                  Users
                 <i class="fas fa-angle-left right"></i>
@@ -91,10 +93,60 @@
               </li>
 
             </ul>
-          </li> --}}
+          </li>
+
+          <li class="nav-header">Roles & Permissions </li>
+          <li class="nav-item">
+              <a href="#" class="nav-link">
+                  <i class="fas fa-user-tag"></i>
+                <p>
+                   Roles
+                  <i class="fas fa-angle-left right"></i>
+                </p>
+              </a>
+              <ul class="nav nav-treeview" style="display: none;">
+                <li class="nav-item">
+                  <a href="{{route('roles.create')}}" class="nav-link">
+                      <i class="far fa-plus-square"></i>
+                    <p>create</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="{{route('roles.index')}}" class="nav-link">
+                      <i class="fas fa-list-ul"></i>
+                    <p>Index</p>
+                  </a>
+                </li>
+
+              </ul>
+            </li>
+            <li class="nav-item">
+              <a href="#" class="nav-link">
+                <i class="fas fa-key"></i>
+                <p>
+                  Permissions
+                  <i class="fas fa-angle-left right"></i>
+                </p>
+              </a>
+              <ul class="nav nav-treeview" style="display: none;">
+                <li class="nav-item">
+                  <a href="{{route('permissions.create')}}" class="nav-link">
+                      <i class="far fa-plus-square"></i>
+                    <p>create</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="{{route('permissions.index')}}" class="nav-link">
+                      <i class="fas fa-list-ul"></i>
+                    <p>Index</p>
+                  </a>
+                </li>
+
+              </ul>
+            </li>
 
 
-        <li class="nav-header">Content Management</li>
+          <li class="nav-header">Content Management</li>
         <li class="nav-item">
             <a href="#" class="nav-link">
                 <i class="fas fa-map-marker-alt"></i>

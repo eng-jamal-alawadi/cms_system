@@ -43,7 +43,7 @@
               <td> {{$user->updated_at}} </td>
               <td>
                 <div class="btn-group">
-                  <a href="{{route('Users.edit',$user->id)}}" class="btn btn-info">
+                  <a href="{{route('users.edit',$user->id)}}" class="btn btn-info">
                     <i class="far fa-edit"></i>
                   </a>
 
@@ -95,7 +95,7 @@
       }
 
       function destroy(id,referance){
-        axios.delete('/cms/user/Users/'+id)
+        axios.delete('/cms/admin/users/'+id)
             .then(function (response) {
                 // handle success
                 console.log(response);

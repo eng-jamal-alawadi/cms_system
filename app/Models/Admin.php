@@ -2,15 +2,16 @@
 
 namespace App\Models;
 
+use Laravel\Sanctum\HasApiTokens;
+use Spatie\Permission\Traits\HasRoles;
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
-use Laravel\Sanctum\HasApiTokens;
 
 class Admin extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable, HasRoles ;
 
     /**
      * The attributes that are mass assignable.
@@ -51,4 +52,65 @@ class Admin extends Authenticatable
     }
 
 }
+/**
+ * Hirarical Inheritance
+ * A{}
+ * B{}
+ * C{}
+ * D{}
+ *
+ * B extends A{}
+ * C extends A{}
+ * D extends A{}
+ */
 
+ /**
+  * Polymorphic Relations
+  *     1. One to Many
+  *    2. Many to Many
+  *   3. One to One
+  * 4. Many to One
+  *
+  */
+
+/**
+ *Multi Level Inheritance
+    * A{}
+    * B{}
+    * C{}
+    * D{}
+    * A extends B{}
+    * C extends A{}
+    * D extends C{}
+    *
+ */
+
+ /**
+  * Singel Level Inheritance
+  * A{}
+  * B{}
+  * C{}
+  * D{}
+  * A extends B{}
+  * C extends D{}
+  *
+  */
+
+  /**
+   * RelationShip in laravel
+   * 1. One to One
+   * 2. One to Many
+   * 3. Many to Many
+   * 4. Many to One
+   * hasOne through
+   * hasMany through
+   * belongsTo
+   * belongsToMany
+   * hasMany
+   * hasOne
+   * morphOne
+   * morphMany
+   * morphTo
+   * morphToMany
+   *
+   */

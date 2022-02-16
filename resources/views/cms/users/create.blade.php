@@ -1,18 +1,17 @@
 @extends('cms.layouts.master')
-@section('title','Admins')
-@section('big_title','Admins')
+@section('title','Users')
+@section('big_title','Users')
 @section('main_page','Home')
 @section('sub_page','Create')
 
 
 @section('content')
- {{-- لا نحتاج السيشن ولا الايرور عند استخدام طرسقة الجافاسكربت --}}
-{{-- @include('errors.errors') --}}
+
 <div class="col-md-12">
     <!-- general form elements -->
     <div class="card card-primary">
       <div class="card-header">
-        <h3 class="card-title">Create Admin</h3>
+        <h3 class="card-title">Create User</h3>
       </div>
       <!-- /.card-header -->
       <!-- form start -->
@@ -20,12 +19,12 @@
         @csrf
         <div class="card-body">
           <div class="form-group">
-            <label for="name">Admin Name</label>
+            <label for="name">User Name</label>
             <input type="text" class="form-control" id="name" value="{{old('name')}}" placeholder="Enter Name" >
           </div>
 
           <div class="form-group">
-            <label for="email">Admin Email</label>
+            <label for="email">User Email</label>
             <input type="text" class="form-control" id="email" value="{{old('email')}}" placeholder="Enter Email" >
           </div>
 
@@ -62,14 +61,14 @@
         formData.append('email',document.getElementById('email').value);
         formData.append('active',document.getElementById('active').checked ? 1 : 0);
 
-        axios.post('/cms/admin/admins',formData)
+        axios.post('/cms/admin/users',formData)
             .then(function (response) {
                 // handle success
                 console.log(response);
                 toastr.success(response.data.message);
 
                 // document.getElementById('create-form').reset();
-                window.location.href="/cms/admin/admins";
+                window.location.href="/cms/admin/users";
 
             })
             .catch(function (error) {
