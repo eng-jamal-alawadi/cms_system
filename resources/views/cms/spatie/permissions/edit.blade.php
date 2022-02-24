@@ -1,3 +1,5 @@
+
+
 @extends('cms.layouts.master')
 @section('title','Permissions')
 @section('big_title','Permissions')
@@ -81,5 +83,5 @@ $('.guards').select2({
 </script>
 
 @endsection
-
+ 
 

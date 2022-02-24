@@ -16,6 +16,7 @@ class CategoryController extends Controller
      */
     public function index()
     {
+        $this->authorize('ViewAny', Category::class);
         $categories= Category::all();
         return response()->view('cms.categories.index',compact('categories',$categories));
     }
@@ -27,6 +28,7 @@ class CategoryController extends Controller
      */
     public function create()
     {
+        $this->authorize('create', Category::class);
 
         return view('cms.categories.create');
     }
@@ -39,6 +41,8 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
+        $this->authorize('create', Category::class);
+
         // $request->validate([
         //     'name'=>'required|min:3|max:30',
         //     'active'=>'required|boolean'
@@ -107,6 +111,7 @@ class CategoryController extends Controller
      */
     public function edit(Category $category)
     {
+        $this->authorize('update' , $category);
         return response()->view('cms.categories.edit',['category'=>$category]);
     }
 
@@ -119,6 +124,8 @@ class CategoryController extends Controller
      */
     public function update(Request $request, Category $category)
     {
+        $this->authorize('update' , $category);
+
         $validator=Validator($request->all(),[
             'name'=>'required|min:3|max:30',
             'active'=>'required|boolean'
@@ -159,6 +166,8 @@ class CategoryController extends Controller
      */
     public function destroy(Category $category)
     {
+        $this->authorize('delete' , Category::class);
+
         $isDeleted = $category->delete();
         if($isDeleted){
             return response()->json([

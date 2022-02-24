@@ -1,3 +1,5 @@
+
+
 @extends('cms.layouts.master')
 @section('title','title')
 @section('big_title','title')

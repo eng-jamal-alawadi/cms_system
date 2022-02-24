@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Admin;
 use Dotenv\Validator;
 use Illuminate\Http\Request;
+use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Symfony\Component\HttpFoundation\Response;
@@ -139,9 +140,15 @@ class AuthController extends Controller
     }
 
     public function editProfile(){
+        $roles = Role::all();
         $guard = auth('admin')->check() ? 'admin' : 'user';
-        $view = auth($guard)->check() ? 'cms.admins.edit' : 'cms.users.edit';
-        return view($view,[$guard=> auth($guard)->user(),'redirect' =>false]);
+        // $view = auth($guard)->check() ? 'cms.admins.edit' : 'cms.users.edit';
+        // return view($view,[$guard=> auth($guard)->user(),'redirect' =>false , 'roles'=>$roles]);
+        if(auth('admin')->check()){
+            return view('cms.admins.edit',['admin'=> auth('admin')->user(),'redirect' =>false , 'roles'=>$roles]);
+        }else{
+            return view('cms.users.edit',['user'=> auth('user')->user(),'redirect' =>false , 'roles'=>$roles]);
+        }
 
     }
 

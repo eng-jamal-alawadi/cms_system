@@ -10,6 +10,9 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\PermissionController;
+use App\Http\Controllers\RolePermissionController;
+use App\Http\Controllers\UserPermissionController;
+use App\Http\Controllers\AdminPermissionController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -27,6 +30,7 @@ Route::prefix('cms/admin')->middleware('auth:admin,user')->group(function () {
 
     Route::view('/', 'cms.layouts.master');
     Route::resource('categories', CategoryController::class);
+    Route::resource('cities', CityController::class);
 
     Route::get('change-password', [AuthController::class, 'changePassword'])->name('change-password');
     Route::put('update-password', [AuthController::class, 'updatePassword']);
@@ -40,11 +44,13 @@ Route::prefix('cms/admin')->middleware('auth:admin,user')->group(function () {
 
 Route::prefix('cms/admin')->middleware('auth:admin')->group(function () {
 
-    Route::resource('cities', CityController::class);
     Route::resource('admins', AdminController::class);
     Route::resource('users', UserController::class);
     Route::resource('roles', RoleController::class);
     Route::resource('permissions', PermissionController::class);
+    Route::resource('roles.permissions', RolePermissionController::class);
+    Route::resource('admin.permissions', AdminPermissionController::class);
+    Route::resource('user.permissions', UserPermissionController::class);
 });
 
 

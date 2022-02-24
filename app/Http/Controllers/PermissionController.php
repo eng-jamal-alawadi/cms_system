@@ -15,6 +15,7 @@ class PermissionController extends Controller
      */
     public function index()
     {
+        $this->authorize('viewAny', Permission::class);
         $permissions = Permission::all();
         return view('cms.spatie.permissions.index', compact('permissions', $permissions));
     }
@@ -26,6 +27,7 @@ class PermissionController extends Controller
      */
     public function create()
     {
+        $this->authorize('create', Permission::class);
         return view('cms.spatie.permissions.create');
 
     }
@@ -38,6 +40,7 @@ class PermissionController extends Controller
      */
     public function store(Request $request)
     {
+        $this->authorize('create', Permission::class);
 
         $validator = Validator($request->all(), [
             'name' => 'required|string|min:3|max:50',
@@ -83,6 +86,8 @@ class PermissionController extends Controller
      */
     public function edit(Permission $permission)
     {
+        $this->authorize('update', Permission::class);
+
         $guards = ['admin', 'user'];
         return view('cms.spatie.permissions.edit', ['permission' => $permission, 'guards' => $guards]);
     }
@@ -96,6 +101,8 @@ class PermissionController extends Controller
      */
     public function update(Request $request, Permission $permission)
     {
+        $this->authorize('update', Permission::class);
+
         $validator = Validator($request->all(), [
             'name' => 'required|string|min:3|max:50',
             'guard_name' => 'required|string|in:admin,user',
@@ -129,6 +136,8 @@ class PermissionController extends Controller
      */
     public function destroy(Permission $permission)
     {
+        $this->authorize('delete', Permission::class);
+
         $isDeleted = $permission->delete();
 
         if ($isDeleted) {

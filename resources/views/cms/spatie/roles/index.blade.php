@@ -1,3 +1,4 @@
+
 @extends('cms.layouts.master')
 @section('title', 'Roles')
 @section('big_title', 'Roles Page')
@@ -23,9 +24,12 @@
                             <th>ID</th>
                             <th>Name</th>
                             <th>Guard</th>
+                            <th>Permissions</th>
                             <th>Created at</th>
                             <th>Updated at</th>
+                            @can('role-edit')
                             <th>Settings</th>
+                            @endcan
                         </tr>
                     </thead>
                     <tbody>
@@ -34,9 +38,11 @@
                                 <td>{{ $role->id }}</td>
                                 <td>{{ $role->name }}</td>
                                 <td><span class="badge bg-success" >{{ $role->guard_name }}</span></td>
+                                <td> <a href="{{ route('roles.permissions.index', $role->id) }}" class="btn btn-info">({{$role->permissions_count}}) Permissions</a></td>
 
                                 <td>{{ $role->created_at }}</td>
                                 <td> {{ $role->updated_at }} </td>
+
                                 <td>
                                     <div class="btn-group">
                                         <a href="{{ route('roles.edit', $role->id) }}" class="btn btn-info">
@@ -50,6 +56,7 @@
 
                                     </div>
                                 </td>
+
                             @empty
                             <tr>No data Found</tr>
                         @endforelse
@@ -87,7 +94,7 @@
                     // handle success
                     console.log(response);
                     referance.closest('tr').remove();
-                    showMessage(response.data);
+                    showMessage(response.data );
                 })
                 .catch(function(error) {
                     // handle error
@@ -107,3 +114,4 @@
         }
     </script>
 @endsection
+

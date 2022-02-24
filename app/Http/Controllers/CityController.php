@@ -15,6 +15,7 @@ class CityController extends Controller
      */
     public function index()
     {
+        $this->authorize('ViewAny', City::class);
         $cities = City::all();
         return view('cms.cities.index',compact('cities',$cities));
     }
@@ -26,6 +27,8 @@ class CityController extends Controller
      */
     public function create()
     {
+        $this->authorize('create', City::class);
+
         return view('cms.cities.create');
     }
 
@@ -37,6 +40,8 @@ class CityController extends Controller
      */
     public function store(Request $request)
     {
+        $this->authorize('create', City::class);
+
         // $request->validate([
         //     'name' => 'required|max:40'
         // ]);
@@ -92,6 +97,8 @@ class CityController extends Controller
     public function edit($id)
     {
         $city = City::findOrFail($id);
+        $this->authorize('update',$city);
+
         return view('cms.cities.edit',compact('city'));
     }
 
@@ -104,6 +111,8 @@ class CityController extends Controller
      */
     public function update(Request $request, City $city)
     {
+        $this->authorize('update',$city);
+
         // $request ->validate([
         //     'name'=>'required|min:3|max:40'
         // ]);
@@ -145,6 +154,8 @@ class CityController extends Controller
      */
     public function destroy(City $city)
     {
+        $this->authorize('delete',$city);
+
         // City::findOrFail($id)->delete();
         // return redirect()->back();
 

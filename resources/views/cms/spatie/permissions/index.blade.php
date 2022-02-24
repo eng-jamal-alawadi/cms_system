@@ -1,3 +1,6 @@
+
+
+
 @extends('cms.layouts.master')
 @section('title', 'permissions')
 @section('big_title', 'permissions Page')
@@ -107,3 +110,4 @@
         }
     </script>
 @endsection
+ 

@@ -1,3 +1,5 @@
+
+
 @extends('cms.layouts.master')
 @section('title','Admins')
 @section('big_title','Admins')
@@ -30,6 +32,15 @@
           </div>
 
           <div class="form-group">
+            <label>Role Name</label>
+            <select class="form-control roles " id="role_name" style="width: 100%;" data-select2-id="1" tabindex="-1" aria-hidden="true">
+                @foreach ($roles as $role)
+                    <option value="{{$role->id}}"  >{{$role->name}}</option>
+                @endforeach
+            </select>
+          </div>
+
+          <div class="form-group">
             <div class="custom-control custom-switch">
               <input type="checkbox" class="custom-control-input"   id="active">
               <label class="custom-control-label"  for="active">Active</label>
@@ -55,14 +66,23 @@
 @section('scripts')
 
 <script>
+
+//Initialize Select2 Elements
+$('.roles').select2({
+  theme: 'bootstrap4'
+})
+
+
+
     function store(){
 
-        let formData = new FormData();
-        formData.append('name',document.getElementById('name').value);
-        formData.append('email',document.getElementById('email').value);
-        formData.append('active',document.getElementById('active').checked ? 1 : 0);
 
-        axios.post('/cms/admin/admins',formData)
+        axios.post('/cms/admin/admins',{
+            'name':document.getElementById('name').value,
+            'email':document.getElementById('email').value,
+            'role_name':document.getElementById('role_name').value,
+            'active':document.getElementById('active').checked ? 1 : 0,
+        })
             .then(function (response) {
                 // handle success
                 console.log(response);

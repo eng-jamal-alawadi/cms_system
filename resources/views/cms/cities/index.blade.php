@@ -22,7 +22,9 @@
               <th>Name</th>
               <th>Created at</th>
               <th>Updated at</th>
+              @can('Update-Cities')
               <th>Settings</th>
+              @endcan
             </tr>
           </thead>
           <tbody>
@@ -32,6 +34,8 @@
               <td>{{$city->name}}</td>
               <td>{{$city->created_at}}</td>
               <td> {{$city->updated_at}} </td>
+              @can('Update-Cities')
+
               <td>
                 <div class="btn-group">
                   <a href="{{route('cities.edit',$city->id)}}" class="btn btn-info">
@@ -44,15 +48,12 @@
                         <i class="far fa-trash-alt"></i>
                       </button>
                   </form> --}}
-
                   <a href="#" class="btn btn-danger" onclick="confirmDestroy({{$city->id}} , this)">
                     <i class="far fa-trash-alt"></i>
-
                   </a>
-
-
                 </div>
                 </td>
+                @endcan
             </tr>
               @empty
                 <tr>No data Found</tr>

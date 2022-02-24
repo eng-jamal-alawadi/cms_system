@@ -16,7 +16,9 @@ class RoleController extends Controller
      */
     public function index()
     {
-        $roles = Role::all();
+        $this->authorize('ViewAny', Role::class);
+
+        $roles = Role::withCount('permissions')->get();
         return view('cms.spatie.roles.index', compact('roles', $roles));
     }
 
@@ -27,6 +29,8 @@ class RoleController extends Controller
      */
     public function create()
     {
+        $this->authorize('create',Role::class);
+
         return view('cms.spatie.roles.create');
     }
 
@@ -38,6 +42,8 @@ class RoleController extends Controller
      */
     public function store(Request $request)
     {
+        $this->authorize('create',Role::class);
+
         $validator = Validator($request->all(), [
             'name' => 'required|string|min:3|max:50',
             'guard_name' => 'required|string|in:admin,user',
@@ -82,6 +88,8 @@ class RoleController extends Controller
      */
     public function edit(Role $role)
     {
+        $this->authorize('update',$role);
+
         $guards = ['admin', 'user'];
         return view('cms.spatie.roles.edit', ['role' => $role, 'guards' => $guards]);
     }
@@ -95,6 +103,8 @@ class RoleController extends Controller
      */
     public function update(Request $request, Role $role)
     {
+        $this->authorize('update',$role);
+
         $validator = Validator($request->all(), [
             'name' => 'required|string|min:3|max:50',
             'guard_name' => 'required|string|in:admin,user',
@@ -128,6 +138,8 @@ class RoleController extends Controller
      */
     public function destroy(Role $role)
     {
+        $this->authorize('delete',$role);
+
         $isDeleted = $role->delete();
 
         if ($isDeleted) {
@@ -142,3 +154,7 @@ class RoleController extends Controller
         }
     }
 }
+
+
+
+

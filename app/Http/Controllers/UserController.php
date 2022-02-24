@@ -6,7 +6,10 @@ use App\Models\User;
 use Dotenv\Validator;
 use App\Mail\welcomeEmail;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Mail;
+use Spatie\Permission\Models\Permission;
 use Symfony\Component\HttpFoundation\Response;
 
 class UserController extends Controller
@@ -18,9 +21,10 @@ class UserController extends Controller
      */
     public function index()
     {
+        $this->authorize('ViewAny', User::class);
         // return 'we are here';
-        $users = User::all();
-        return view('cms.users.index', compact('users'));
+        $users = User::withCount('permissions')->get();
+        return view('cms.users.index', ['users' => $users]);
     }
 
     /**
@@ -30,7 +34,9 @@ class UserController extends Controller
      */
     public function create()
     {
-        return view('cms.users.create');
+        $this->authorize('create', User::class);
+        // $roles = Role::all();
+        return view('cms.users.create' );
     }
 
     /**
@@ -41,10 +47,12 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
+        $this->authorize('create', User::class);
 
         $validator = Validator($request->all(), [
             'name' => 'required|min:3|max:30',
             'active' => 'required|boolean',
+            // 'role_name' => 'required',
             'email' => 'required'
         ]);
 
@@ -54,8 +62,14 @@ class UserController extends Controller
             $user->active = $request->get('active');
             $user->email = $request->get('email');
             $isSaved = $user->save();
+            // $user ->assignRole($request->get('role_name'));
 
-            Mail::to($user->email)->send(new welcomeEmail($user));
+            // DB::table('model_has_roles')->insert([
+            //     'role_id'=>$request->get('role_name'),
+            //     'model_id'=>$user->id,
+            //     'model_type'=>'User'
+            // ]);
+            // Mail::to($user->email)->send(new welcomeEmail($user));
 
             return response()->json(
                 [
@@ -89,7 +103,11 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
-        return view('cms.users.edit', compact('user', $user));
+        $this->authorize('update', $user);
+
+        // $roles = Role::all();
+
+        return view('cms.users.edit', ['user' => $user ]);
     }
 
     /**
@@ -101,10 +119,12 @@ class UserController extends Controller
      */
     public function update(Request $request, User $user)
     {
+        $this->authorize('update', $user);
 
         $validator = Validator($request->all(), [
             'name' => 'required|min:3|max:30',
             'active' => 'required|boolean',
+            // 'role_name' => 'required',
             'email' => 'required'
         ]);
 
@@ -113,6 +133,14 @@ class UserController extends Controller
             $user->name = $request->get('name');
             $user->active = $request->get('active');
             $user->email = $request->get('email');
+            // DB::table('model_has_roles')->where('model_id',$user->id)->delete();
+            // DB::table('model_has_roles')->insert([
+            //     'role_id'=>$request->get('role_name'),
+            //     'model_id'=>$user->id,
+            //     'model_type'=>'User'
+            // ]);
+            // $user ->assignRole($request->get('role_name'));
+
             $isUpdated = $user->save();
 
             return response()->json(
@@ -136,6 +164,8 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
+        $this->authorize('delete', $user);
+
         $isDeleted = $user->delete();
         if($isDeleted){
             return response()->json([
@@ -150,3 +180,5 @@ class UserController extends Controller
         }
     }
 }
+
+

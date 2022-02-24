@@ -1,3 +1,5 @@
+
+
 @extends('cms.layouts.master')
 @section('title','Admins')
 @section('big_title','Admins')
@@ -27,6 +29,18 @@
             <label for="email">Admin Email</label>
             <input type="text" class="form-control" id="email" value="{{$admin->email}}" placeholder="Enter Email" >
           </div>
+
+          <div class="form-group">
+            <label>Role Name</label>
+            <select class="form-control roles " id="role_name" style="width: 100%;"
+             data-select2-id="1" tabindex="-1" aria-hidden="true">
+                @foreach ($roles as $role)
+                    <option value="{{$role->id}}"  >{{$role->name}}</option>
+                @endforeach
+            </select>
+          </div>
+
+
 
           <div class="form-group">
             <div class="custom-control custom-switch">
@@ -62,6 +76,7 @@
 axios.put('/cms/admin/admins/'+id,{
     name: document.getElementById('name').value,
     email: document.getElementById('email').value,
+    'role_name':document.getElementById('role_name').value,
     active: document.getElementById('active').checked ? 1 :0,
 
 })
@@ -87,5 +102,5 @@ axios.put('/cms/admin/admins/'+id,{
 </script>
 
 @endsection
-
+ 
 

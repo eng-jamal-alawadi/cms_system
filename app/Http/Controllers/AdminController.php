@@ -6,6 +6,8 @@ use App\Models\Admin;
 use Dotenv\Validator;
 use App\Mail\welcomeEmail;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Mail;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -19,9 +21,11 @@ class AdminController extends Controller
      */
     public function index()
     {
-        //SELECT * FROM admins WHERE id != 1
+        $this->authorize('ViewAny', Admin::class);
+        $users_type = Role::all();
+        $roles =DB::table('model_has_roles')->pluck('role_id',)->all();
         $admins = Admin::where('id','!=',auth('admin')->id())->get();
-        return view('cms.admins.index',compact('admins',$admins));
+        return view('cms.admins.index',['admins'=>$admins,'roles'=>$roles ,'users_type'=>$users_type]);
     }
 
     /**
@@ -31,7 +35,10 @@ class AdminController extends Controller
      */
     public function create()
     {
-        return view('cms.admins.create');
+        $this->authorize('create', Admin::class);
+        $roles = Role::all();
+
+        return view('cms.admins.create',compact('roles',$roles));
     }
 
     /**
@@ -42,10 +49,12 @@ class AdminController extends Controller
      */
     public function store(Request $request)
     {
+        $this->authorize('create', Admin::class);
 
         $validator=Validator($request->all(),[
             'name'=>'required|min:3|max:30',
             'active'=>'required|boolean',
+            'role_name' => 'required',
             'email'=>'required'
         ]);
 
@@ -55,8 +64,18 @@ class AdminController extends Controller
             $admin->active=$request->get('active');
             $admin->email=$request->get('email');
             $isSaved=$admin->save();
+            $admin ->assignRole($request->get('role_name'));
+            // DB::table('model_has_roles')->insert([
+            //     'role_id' => $request->get('role_name'),
+            //     'model_id' => $admin->id,
+            //     'model_type' => 'Admin',
+            //     // 'model_type' => get_class($admin),
+            // ]);
 
-            Mail::to($admin->email)->send(new welcomeEmail($admin));
+
+            $isSaved=$admin->save();
+
+            // Mail::to($admin->email)->send(new welcomeEmail($admin));
             return response()->json([
                 'message'=>$isSaved ?" admin Saved Successfuly" : "Failed to Saved"],
                 $isSaved ? Response::HTTP_CREATED : Response::HTTP_BAD_REQUEST );
@@ -88,7 +107,12 @@ class AdminController extends Controller
      */
     public function edit(Admin $admin)
     {
-        return view('cms.admins.edit',compact('admin',$admin));
+        $this->authorize('update', $admin);
+        $roles = Role::all();
+        // $roles = Role::pluck('name','name')->all();
+        // $adminRole = $admin->roles->pluck('name','name')->all();
+
+        return view('cms.admins.edit',['admin'=>$admin,'roles'=>$roles ]);
     }
 
     /**
@@ -100,18 +124,29 @@ class AdminController extends Controller
      */
     public function update(Request $request, Admin $admin)
     {
+        $this->authorize('update', $admin);
+
         $validator=Validator($request->all(),[
             'name'=>'required|min:3|max:30',
             'active'=>'required|boolean',
+            'role_name' => 'required',
             'email'=>'required'
         ]);
-
         if(!$validator->fails()){
 
             $admin->name=$request->get('name');
             $admin->active=$request->get('active');
             $admin->email=$request->get('email');
+            DB::table('model_has_roles')->where('model_id',$admin->id)->delete();
+            $admin ->assignRole($request->get('role_name'));
+
             $isUpdated=$admin->save();
+            // DB::table('model_has_roles')->insert([
+            //     'role_id' => $request->get('role_name'),
+            //     'model_id' => $admin->id,
+            //     'model_type' => get_class($admin),
+            // ]);
+
             return response()->json([
                 'message'=>$isUpdated ?" Admin Updated Successfuly" : "Failed to Update"],
                 $isUpdated ? Response::HTTP_CREATED : Response::HTTP_BAD_REQUEST );
@@ -133,7 +168,9 @@ class AdminController extends Controller
      */
     public function destroy(Admin $admin)
     {
+        $this->authorize('delete', $admin);
         $isDeleted = $admin->delete();
+
         if($isDeleted){
             return response()->json([
                 'title'=>'Success' , 'text'=>'Admin Deleted Successfuly' , 'icon'=>'success'
@@ -145,5 +182,7 @@ class AdminController extends Controller
             ],Response::HTTP_BAD_REQUEST);
 
         }
+
+
     }
 }

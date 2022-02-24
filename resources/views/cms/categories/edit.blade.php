@@ -1,3 +1,4 @@
+
 @extends('cms.layouts.master')
 @section('title','Categories')
 @section('big_title','Categories')
@@ -113,5 +114,4 @@ axios.put('/cms/admin/categories/'+id,{
 </script>
 
 @endsection
-
 
