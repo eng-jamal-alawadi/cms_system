@@ -56,6 +56,11 @@ return [
             'driver' => 'session',
             'provider' => 'administrator',
         ],
+        'api'=>[
+            'driver'=>'passport',
+            'provider'=>'users',
+            'hash'=>false,
+        ],
 
 
 
@@ -94,10 +99,10 @@ return [
             'model'=>Administrator::class,
         ]
 
-        // 'users' => [
-        //     'driver' => 'database',
-        //     'table' => 'users',
-        // ],
+    //    , 'users' => [
+    //         'driver' => 'database',
+    //         'table' => 'users',
+    //     ],
     ],
 
     /*

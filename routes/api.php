@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\ApiAuthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -22,4 +23,12 @@ Route::get('welcome',function(){
     return response()->json([
         'message'=>'welcome to database app testing -> in laravel 8'
     ]);
+});
+
+Route::prefix('auth')->group(function(){
+    Route::post('login',[ApiAuthController::class,'login']);
+});
+
+Route::prefix('auth')->middleware('auth:api')->group(function(){
+    Route::get('logout',[ApiAuthController::class,'logout']);
 });
