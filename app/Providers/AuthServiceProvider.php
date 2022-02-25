@@ -37,6 +37,7 @@ class AuthServiceProvider extends ServiceProvider
         });
 
         Passport::personalAccessTokensExpireIn(Carbon::now()->addMonth());
+        Passport::routes();
 
 
     }
