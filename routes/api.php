@@ -28,6 +28,8 @@ Route::get('welcome',function(){
 
 Route::prefix('auth')->group(function(){
     Route::post('login',[ApiAuthController::class,'login']);
+    Route::post('forgot-password',[ApiAuthController::class,'forgotPassword']);
+    Route::post('reset-password',[ApiAuthController::class,'resetPassword']);
 });
 
 Route::prefix('auth')->middleware('auth:api')->group(function(){

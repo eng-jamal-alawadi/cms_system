@@ -128,6 +128,58 @@ class ApiAuthController extends Controller
         }
     }
 
+    // forgotPassword function to send email to user to reset password and send code verification
+
+    public function forgotPassword(Request $request){
+        $validator = Validator($request->all(), [
+            'email' => 'required|email|exists:users,email'
+        ]);
+
+        if (!$validator->fails()) {
+             $code = rand(1000 , 9999);
+             $user = User::where('email', $request->get('email'))->first();
+             $user->verfication_code = Hash::make($code);
+             $user->save();
+             return response()->json([
+                 'message' => 'code sent to your email',
+                 'code' => $code
+             ], Response::HTTP_OK);
+        } else {
+            return response()->json([
+                'message' => $validator->getMessageBag()->first()
+            ], Response::HTTP_BAD_REQUEST);
+        }
+    }
+
+    // resetPassword function to reset password
+
+    public function resetPassword(Request $request){
+        $validator = Validator($request->all(), [
+            'email' => 'required|email|exists:users,email',
+            'code' => 'required|numeric|digits:4',
+            'password' => 'required|string|min:6|confirmed'
+        ]);
+        if(!$validator->fails()){
+            $user = User::where('email', $request->get('email'))->first();
+            if(Hash::check($request->get('code'), $user->verfication_code)){
+                $user->password = Hash::make($request->get('password'));
+                $isSaved = $user->save();
+                return response()->json([
+                    'message'=> $isSaved ? 'password changed successfully' : 'password not changed',
+
+                ]);
+            }else{
+                return response()->json([
+                    'message'=> 'code is incorrect'
+                ], Response::HTTP_BAD_REQUEST);
+            }
+        }else{
+            return response()->json([
+                'message' => $validator->getMessageBag()->first()
+            ], Response::HTTP_BAD_REQUEST);
+        }
+    }
+
 
 
     public function logout()
