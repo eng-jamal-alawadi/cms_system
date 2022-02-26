@@ -3,6 +3,7 @@
 namespace App\Models;
 
 
+use App\Models\Category;
 use Laravel\Passport\HasApiTokens;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Traits\HasRoles;
@@ -66,6 +67,11 @@ class User extends Authenticatable
     public function validateForPassportPasswordGrant($password)
     {
         return Hash::check($password, $this->password);
+    }
+
+    public function categories()
+    {
+        return $this->hasMany(Category::class);
     }
 
 

@@ -18,6 +18,13 @@ class CreateCategoriesTable extends Migration
             $table->string('name');
             // $table->string('info');
             $table->boolean('active')->default(true);
+            
+            $table->foreignId('user_id')->nullable();
+            $table->foreign('user_id')->references('id')->on('users');
+
+            $table ->foreignId('admin_id')->nullable();
+            $table->foreign('admin_id')->references('id')->on('admins');
+            $table->string('image')->nullable();
             $table->timestamps();
         });
     }

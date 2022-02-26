@@ -58,6 +58,9 @@ class Admin extends Authenticatable
     public function isSuperAdmin(){
         return $this->hasRole('Super Admin');
     }
+    public function categories(){
+        return $this->hasMany(Category::class);
+    }
 
 
 }

@@ -68,7 +68,7 @@ class CategoryPolicy
      */
     public function update($user, Category $category)
     {
-        return $user->hasAllPermissions('Update-Categories')
+        return $user->hasPermissionTo('Update-Categories')
         ? $this->allow()
         : $this->deny('You can not update a category');
     }
@@ -82,6 +82,12 @@ class CategoryPolicy
      */
     public function delete($user, Category $category)
     {
+        // return auth('user')->check() || auth('api')->check() || auth('admin')->check()
+        // && $category->user_id == $user->id
+        // && $user->hasPermissionTo('Delete-Categories')
+        // ? $this->allow()
+        // : $this->deny('You can not delete a category');
+
         return $user->hasPermissionTo('Delete-Categories')
         ? $this->allow()
         : $this->deny('You can not delete a category');

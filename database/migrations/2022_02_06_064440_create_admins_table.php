@@ -20,6 +20,7 @@ class CreateAdminsTable extends Migration
             $table->string('password')->default(bcrypt('123456789'));
             $table->timestamp('email_verified_at')->nullable();
             $table->boolean('active')->default(true);
+            
             $table->rememberToken();
             $table->timestamps();
         });

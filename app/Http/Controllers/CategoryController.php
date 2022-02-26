@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Admin;
 use App\Models\Category;
+use App\Models\User;
 use Dotenv\Validator;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -14,10 +16,28 @@ class CategoryController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    //constructor magic function
+    // public function __construct()
+    // {
+    //     $this->middleware('auth');
+    // }
+
+
+
     public function index()
     {
         $this->authorize('ViewAny', Category::class);
-        $categories= Category::all();
+        // $categories= Category::all();
+        // $categories= auth('admin')->user()->categories;
+
+        $guard = auth()->guard('admin')->check()? 'admin' : 'user';
+        if($guard == 'admin'){
+            $categories = Admin::find(auth()->guard('admin')->user()->id)->categories;
+        }else{
+            $categories = User::find(auth()->guard('user')->user()->id)->categories;
+        }
+
+
         return response()->view('cms.categories.index',compact('categories',$categories));
     }
 
@@ -63,18 +83,49 @@ class CategoryController extends Controller
             'category_image'=>'required|image|max:2048|mimes:jpg,png'
         ]);
 
-        if(!$validator->fails()){
-            $category=new Category();
-            $category->name=$request->get('name');
-            $category->active=$request->get('active');
 
+        if(!$validator->fails()){
+            // $category= auth('user')->user()->categories()->get();
             $ex = $request->file('category_image')->getClientOriginalExtension();
             $new_name = 'category_'.time().'_'.$ex;
             $request->file('category_image')->move(public_path('upload'),$new_name);
+
+            $category=new Category();
+            $category->name=$request->get('name');
+            $category->active=$request->get('active');
             $category->image=$new_name;
+
+            $guard = auth()->guard('admin')->check()? 'admin' : 'user';
+            if($guard == 'admin'){
+                // الطريقتين شغالات في الحالة الأولى والثانية بالإضافة لأنها تحتاج إلى تحديد المستخدم الذي سيتم إضافته إلى القائمة المختارة له
+                    $isSaved = Admin::find(auth()->guard('admin')->user()->id)->categories()->save($category);
+            // $isSaved = auth($guard)->user()->categories()->save($category);
+            }else{
+                $isSaved = User::find(auth()->guard('user')->user()->id)->categories()->save($category);
+                // $isSaved = auth($guard)->user()->categories()->save($category);
+            }
+
+
+            // $ex = $request->file('category_image')->getClientOriginalExtension();
+            // $new_name = 'category_'.time().'_'.$ex;
+            // $request->file('category_image')->move(public_path('upload'),$new_name);
+
+            // $category = User::find(auth('user')->user()->id)->categories()->create([
+            //     'name'=>$request->name,
+            //     'active'=>$request->active,
+            //     'image'=>$new_name
+            // ]);
+
+            // $category->name=$request->get('name');
+            // $category->active=$request->get('active');
+
+            // $category->image=$new_name;
 
 
             $isSaved=$category->save();
+
+
+
             return response()->json([
                 'message'=>$isSaved ?" category Saved Successfuly" : "Failed to Saved"],
                 $isSaved ? Response::HTTP_CREATED : Response::HTTP_BAD_REQUEST );
@@ -166,7 +217,9 @@ class CategoryController extends Controller
      */
     public function destroy(Category $category)
     {
-        $this->authorize('delete' , Category::class);
+        // $this->authorize('delete' , Category::class);
+        $this->authorize('delete' , $category);
+
 
         $isDeleted = $category->delete();
         if($isDeleted){
