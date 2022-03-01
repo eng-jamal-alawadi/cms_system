@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\TaskController;
 use App\Http\Controllers\Api\ApiAuthController;
 use App\Http\Controllers\Api\CategoryController;
 
@@ -38,4 +39,8 @@ Route::prefix('auth')->middleware('auth:api')->group(function(){
 
 Route::middleware('auth:api')->group(function(){
     Route::apiResource(('categories'),CategoryController::class);
+});
+
+Route::middleware('auth:api')->group(function(){
+    Route::apiResource(('tasks'),TaskController::class);
 });

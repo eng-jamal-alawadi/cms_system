@@ -5,10 +5,11 @@ namespace App\Models;
 use App\Models\Category;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Laravel\Passport\HasApiTokens;
 
 class Task extends Model
 {
-    use HasFactory;
+    use HasFactory , HasApiTokens;
 
     protected $fillable = [
         'name', 'description', 'category_id'

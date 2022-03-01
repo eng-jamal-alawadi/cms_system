@@ -23,6 +23,7 @@ class TaskController extends Controller
         // $tasks = Task::where('category_id', $user->categories()->first()->id)->get();
        if(auth()->guard('admin')->check()){
         $tasks = Task::all();
+
         return view('cms.tasks.index', compact('tasks',$tasks));
 
        } else{
@@ -69,6 +70,7 @@ class TaskController extends Controller
             $task->name = $request->name;
             $task->description = $request->description;
             $task->category_id = $request->category_id;
+            $task->user_id = auth()->user()->id;
             $isSaved = $task->save();
             return response()->json(['message' => $isSaved ? 'Task created' : 'Task not created'
         ], $isSaved ? Response::HTTP_CREATED : Response::HTTP_BAD_REQUEST);
