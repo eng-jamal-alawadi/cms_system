@@ -3,6 +3,7 @@
 namespace App\Models;
 
 
+use App\Models\Task;
 use App\Models\Category;
 use Laravel\Passport\HasApiTokens;
 use Illuminate\Support\Facades\Hash;
@@ -72,6 +73,11 @@ class User extends Authenticatable
     public function categories()
     {
         return $this->hasMany(Category::class);
+    }
+
+    public function tasks()
+    {
+        return $this->hasManyThrough(Task::class, Category::class, 'user_id', 'category_id', 'id', 'id');
     }
 
 

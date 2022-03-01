@@ -62,9 +62,12 @@ class PermissionTableSeeder extends Seeder
         // Permission::create(['name'=>'Update-Cities', 'guard_name'=>'user']);
         // Permission::create(['name'=>'Delete-Cities', 'guard_name'=>'user']);
 
-        Permission::create(['name'=>'Read-User', 'guard_name'=>'user']);
+        // Permission::create(['name'=>'Read-User', 'guard_name'=>'user']);
 
-
+        // Permission::create(['name'=>'Read-Task', 'guard_name'=>'user']);
+        // Permission::create(['name'=>'Create-Task', 'guard_name'=>'user']);
+        // Permission::create(['name'=>'Update-Task', 'guard_name'=>'user']);
+        // Permission::create(['name'=>'Delete-Task', 'guard_name'=>'user']);
 
 
 

@@ -241,6 +241,41 @@
                 @endcan
             </ul>
           </li>
+          @can('Read-Task')
+
+
+
+          <li class="nav-item">
+            <a href="#" class="nav-link">
+                <i class="fas fa-tasks"></i>
+              <p>
+                 Tasks
+                <i class="fas fa-angle-left right"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview" style="display: none;">
+                @can('Create-Task')
+              <li class="nav-item">
+                <a href="{{route('tasks.create')}}" class="nav-link">
+                    <i class="far fa-plus-square"></i>
+                  <p>create</p>
+                </a>
+              </li>
+              @endcan
+              {{-- @can('Read-Tasks') --}}
+
+
+              <li class="nav-item">
+                <a href="{{route('tasks.index')}}" class="nav-link">
+                    <i class="fas fa-list-ul"></i>
+                  <p>Index</p>
+                </a>
+              </li>
+              @endcan
+
+                {{-- @endcan --}}
+            </ul>
+          </li>
           {{-- @endcan --}}
           {{-- @endhasanyrole --}}
         <li class="nav-header">Settings</li>

@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CityController;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\TaskController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CategoryController;
@@ -31,6 +32,7 @@ Route::prefix('cms/admin')->middleware('auth:admin,user')->group(function () {
     Route::view('/', 'cms.layouts.master');
     Route::resource('categories', CategoryController::class);
     Route::resource('cities', CityController::class);
+    Route::resource('tasks', TaskController::class);
 
     Route::get('change-password', [AuthController::class, 'changePassword'])->name('change-password');
     Route::put('update-password', [AuthController::class, 'updatePassword']);

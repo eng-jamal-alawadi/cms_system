@@ -63,6 +63,10 @@ class Admin extends Authenticatable
     }
 
 
+
+
+
+
 }
 /**
  * Hirarical Inheritance

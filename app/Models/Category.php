@@ -30,4 +30,8 @@ class Category extends Model
             return $this->belongsTo(Admin::class);
         }
 
+        public function tasks(){
+            return $this->hasMany(Task::class);
+        }
+
 }
