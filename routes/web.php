@@ -10,10 +10,12 @@ use App\Http\Controllers\TaskController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CategoryController;
+use Symfony\Component\HttpFoundation\Request;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\RolePermissionController;
 use App\Http\Controllers\UserPermissionController;
 use App\Http\Controllers\AdminPermissionController;
+use Illuminate\Foundation\Auth\EmailVerificationRequest;
 
 Route::get('/', function () {
     return view('welcome');
@@ -37,7 +39,7 @@ Route::prefix('cms/admin')->middleware('auth:admin,user')->group(function () {
     Route::get('change-password', [AuthController::class, 'changePassword'])->name('change-password');
     Route::put('update-password', [AuthController::class, 'updatePassword']);
 
-    Route::get('edit-profile', [AuthController::class, 'editProfile'])->name('edit-profile');
+    Route::get('edit-profile', [AuthController::class, 'editProfile'])->middleware('verified')->name('edit-profile');
     Route::put('update-profile', [AuthController::class, 'updateProfile']);
 
     Route::get('logout', [AuthController::class, 'logout'])->name('logout');
@@ -56,12 +58,25 @@ Route::prefix('cms/admin')->middleware('auth:admin')->group(function () {
 });
 
 
+// Email Verification Routes...     //
+
+Route::get('/email/verify', function () {
+    return view('cms.auth.verify-email');
+})->middleware('auth:admin')->name('verification.notice');
+
+Route::post('/email/verification-notification', function (Request $request) {
+    $request->user()->sendEmailVerificationNotification();
+
+    // return back()->with('message', 'Verification link sent!');
+    return response()->json(['message' => 'Verification link sent successfuly !']);
+})->middleware(['auth:admin', 'throttle:6,1'])->name('verification.send');
+
+Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
+    $request->fulfill();
+
+    return redirect('/cms/admin');
+})->middleware(['auth:admin', 'signed'])->name('verification.verify');
 
 
 
 
-
-
-// Route::get('test-email',function(){
-//     return new welcomeEmail();
-// });

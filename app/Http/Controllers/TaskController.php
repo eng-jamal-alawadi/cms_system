@@ -23,7 +23,6 @@ class TaskController extends Controller
         // $tasks = Task::where('category_id', $user->categories()->first()->id)->get();
        if(auth()->guard('admin')->check()){
         $tasks = Task::all();
-
         return view('cms.tasks.index', compact('tasks',$tasks));
 
        } else{

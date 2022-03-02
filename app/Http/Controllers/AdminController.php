@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Admin;
 use Dotenv\Validator;
 use App\Mail\welcomeEmail;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role;
@@ -55,7 +56,7 @@ class AdminController extends Controller
             'name'=>'required|min:3|max:30',
             'active'=>'required|boolean',
             'role_name' => 'required',
-            'email'=>'required'
+            'email'=>'required|email|unique:admins,email',
         ]);
 
         if(!$validator->fails()){
@@ -65,16 +66,14 @@ class AdminController extends Controller
             $admin->email=$request->get('email');
             $isSaved=$admin->save();
             $admin ->assignRole($request->get('role_name'));
+            event(new Registered($admin));
+
             // DB::table('model_has_roles')->insert([
             //     'role_id' => $request->get('role_name'),
             //     'model_id' => $admin->id,
             //     'model_type' => 'Admin',
             //     // 'model_type' => get_class($admin),
             // ]);
-
-
-            $isSaved=$admin->save();
-
             // Mail::to($admin->email)->send(new welcomeEmail($admin));
             return response()->json([
                 'message'=>$isSaved ?" admin Saved Successfuly" : "Failed to Saved"],

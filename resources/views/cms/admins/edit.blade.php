@@ -29,6 +29,7 @@
             <label for="email">Admin Email</label>
             <input type="text" class="form-control" id="email" value="{{$admin->email}}" placeholder="Enter Email" >
           </div>
+          @if (auth('admin')->id() != $admin->id)
 
           <div class="form-group">
             <label>Role Name</label>
@@ -40,6 +41,7 @@
             </select>
           </div>
 
+          @endif
 
 
           <div class="form-group">
@@ -102,5 +104,5 @@ axios.put('/cms/admin/admins/'+id,{
 </script>
 
 @endsection
- 
+
 
