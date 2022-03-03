@@ -15,11 +15,10 @@ use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\RolePermissionController;
 use App\Http\Controllers\UserPermissionController;
 use App\Http\Controllers\AdminPermissionController;
+use App\Http\Controllers\dashboardController;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+
 
 Route::prefix('cms/')->middleware('guest:admin,user')->group(function () {
 
@@ -30,8 +29,8 @@ Route::prefix('cms/')->middleware('guest:admin,user')->group(function () {
 
 Route::prefix('cms/admin')->middleware('auth:admin,user')->group(function () {
     // Route::prefix('cms/admin')->group(function(){
-
-    Route::view('/', 'cms.layouts.master');
+        Route::get('/', [dashboardController::class, 'index'])->name('dashboard');
+    // Route::view('/', 'cms.layouts.master');
     Route::resource('categories', CategoryController::class);
     Route::resource('cities', CityController::class);
     Route::resource('tasks', TaskController::class);
@@ -76,7 +75,3 @@ Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $requ
 
     return redirect('/cms/admin');
 })->middleware(['auth:admin', 'signed'])->name('verification.verify');
-
-
-
-

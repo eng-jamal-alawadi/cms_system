@@ -8,7 +8,7 @@
         </div>
         <div class="info">
             {{-- <a href="#" class="d-block">{{auth()->user()->name}}</a> --}}
-            <a href="#" class="d-block">{{ auth()->user()->name }} </a>
+            <a href="{{route('dashboard')}}" class="d-block">{{ auth()->user()->name }} </a>
         </div>
     </div>
 
@@ -20,27 +20,14 @@
 
 
             <li class="nav-item menu-open">
-                <a href="#" class="nav-link active">
+                <a href="{{route('dashboard')}}" class="nav-link active">
                     <i class="nav-icon fas fa-tachometer-alt"></i>
                     <p>
-                        Starter Pages
-                        <i class="right fas fa-angle-left"></i>
+                        Dashboard
+
                     </p>
                 </a>
-                <ul class="nav nav-treeview">
-                    <li class="nav-item">
-                        <a href="#" class="nav-link active">
-                            <i class="far fa-circle nav-icon"></i>
-                            <p>Active Page</p>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="#" class="nav-link">
-                            <i class="far fa-circle nav-icon"></i>
-                            <p>Inactive Page</p>
-                        </a>
-                    </li>
-                </ul>
+
             </li>
             {{-- @can('role-permissions') --}}
             @hasrole('Super-Admin')
@@ -179,6 +166,7 @@
 
             <li class="nav-header">Content Management</li>
             <li class="nav-item">
+                @can('Create-Cities')
                 <a href="#" class="nav-link">
                     <i class="fas fa-map-marker-alt"></i>
                     <p>
@@ -186,6 +174,7 @@
                         <i class="fas fa-angle-left right"></i>
                     </p>
                 </a>
+                @endcan
                 <ul class="nav nav-treeview" style="display: none;">
                     @can('Create-Cities')
                         <li class="nav-item">
