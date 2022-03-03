@@ -17,10 +17,10 @@ class PermissionTableSeeder extends Seeder
 
         // Permission::create(['name'=>'', 'guard_name'=>'']);
 
-        Permission::create(['name'=>'Read-', 'guard_name'=>'']);
-        Permission::create(['name'=>'Create-', 'guard_name'=>'']);
-        Permission::create(['name'=>'Update-', 'guard_name'=>'']);
-        Permission::create(['name'=>'Delete-', 'guard_name'=>'']);
+        // Permission::create(['name'=>'Read-', 'guard_name'=>'']);
+        // Permission::create(['name'=>'Create-', 'guard_name'=>'']);
+        // Permission::create(['name'=>'Update-', 'guard_name'=>'']);
+        // Permission::create(['name'=>'Delete-', 'guard_name'=>'']);
 
         Permission::create(['name'=>'Read-Admin', 'guard_name'=>'admin']);
         Permission::create(['name'=>'Create-Admin', 'guard_name'=>'admin']);
